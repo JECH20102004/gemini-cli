@@ -380,7 +380,7 @@ function mergeSettings(
   // 2. User Settings
   // 3. Workspace Settings
   // 4. System Settings (as overrides)
-  return customDeepMerge(
+  const merged = customDeepMerge(
     getMergeStrategyForPath,
     {}, // Start with an empty object
     systemDefaults,
@@ -388,6 +388,13 @@ function mergeSettings(
     safeWorkspace,
     system,
   ) as Settings;
+  // HACK. Do not commit.
+  if (merged.ui === undefined) {
+    merged.ui = {};
+  }
+  merged.ui.useAlternateBuffer = true;
+  merged.ui.useInkScrolling = true;
+  return merged;
 }
 
 export class LoadedSettings {
